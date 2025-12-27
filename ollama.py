@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 from schemas import text1,main_city,search
 import logging
 from datetime import datetime
+import os
 
 models.Base.metadata.create_all(bind=engine)
 app = FastAPI()
@@ -30,9 +31,9 @@ def chats(user_prompt: text1, db: Session = Depends(data1)):
         things = {"model": "llama3", "prompt": user_prompt.prompt, "stream": False}
 
         # Ensure this is 127.0.0.1
-        url = "http://127.0.0.1:11434/api/generate"
+        url_key=os.getenv("url")
 
-        report = requests.post(url, json=things)
+        report = requests.post(url_key, json=things)
         report.raise_for_status()
 
         # FIX 2: Spelling "response" (with an S)
